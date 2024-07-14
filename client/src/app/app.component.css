@@ -1,0 +1,19 @@
+app-footer {
+  position: relative;
+  bottom: 0;
+  display: flex;
+  flex: 1;
+  right: 0;
+  left: 0;
+  justify-content: center;
+  width: auto;
+  background-color: rgba(235, 235, 235, 0.66);
+}
+
+main {
+  min-height: 76vh;
+  margin-top: 80px;
+  /* justify-content: center; */
+  /* display: flex; */
+  /* flex-direction: row; */
+}

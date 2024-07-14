@@ -1,0 +1,20 @@
+<div
+  class="container d-flex flex-column align-items-center justify-content-start vh-100"
+>
+  @if(isOrderPlaced) {
+  <div class="text-center">
+    <h1 class="fw-bold">Thank you</h1>
+    <h1 class="fw-bold">Order placed successfully 🎉</h1>
+  </div>
+  } @else if(!isOrderPlaced && !errorMessage) {
+  <h1 class="fw-bold text-center">Creating order...</h1>
+  } @else {
+  <div class="text-center">
+    <h1 class="fw-bold">{{ errorMessage }}</h1>
+  </div>
+  }
+  <button mat-flat-button color="primary" class="p-4" (click)="onBackToStore()">
+    <mat-icon>store</mat-icon>
+    Back to Store
+  </button>
+</div>

@@ -1,0 +1,23 @@
+.brand-container {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.logout-btn {
+  background-color: rgb(255, 98, 98);
+}
+
+.search-bar {
+  margin-left: 25%;
+  margin-right: 25%;
+}
+
+.navbar {
+  background-color: rgba(243, 243, 243, 0.377);
+}

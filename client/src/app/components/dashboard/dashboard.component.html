@@ -1,0 +1,38 @@
+<!-- Total Earning -->
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <app-total-earning
+        [isLoading]="isLoading"
+        (selectedFilter)="onSelectingEarningFilter($event)"
+        [totalEarning]="totalEarning"
+        [selectedEarningFilter]="selectedEarningFilter"
+      ></app-total-earning>
+
+      <div class="mt-4">
+        <app-most-selling-books
+          [isLoading]="isLoading"
+          [mostSellingBooks]="mostSellingBooks"
+        ></app-most-selling-books>
+      </div>
+    </div>
+    <div class="col-md-6 mb-4">
+      <app-top-customer-countries
+        [isLoading]="isLoading"
+        [topCustomerCountries]="topCustomerCountries"
+      ></app-top-customer-countries>
+
+      <div class="mt-4">
+        <app-most-selling-category
+          [isLoading]="isLoading"
+          [mostSellingCategories]="mostSellingCategory"
+        ></app-most-selling-category>
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <h1 class="fw-bold mb-4 ms-3">Orders</h1>
+      <app-orders-list></app-orders-list>
+    </div>
+  </div>
+</div>

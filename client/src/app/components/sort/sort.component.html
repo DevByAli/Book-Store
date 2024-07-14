@@ -1,0 +1,15 @@
+<button mat-stroked-button [matMenuTriggerFor]="menu">
+  <mat-icon>swap_vert</mat-icon>
+  Order by
+  {{
+    selectedOrder === "-1"
+      ? ": Descending"
+      : selectedOrder === "1"
+      ? ": Ascending"
+      : ""
+  }}
+</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="onOrderSelect('-1')">Descending</button>
+  <button mat-menu-item (click)="onOrderSelect('1')">Ascending</button>
+</mat-menu>

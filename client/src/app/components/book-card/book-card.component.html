@@ -1,0 +1,79 @@
+<mat-card class="example-card" style="border-radius: 6px" [id]="bookId">
+  <span (click)="onBook()" style="cursor: pointer">
+    <img mat-card-image [src]="imgUrl"  class="img-fluid w-100"/>
+    <mat-card-content class="m-0 p-0 ps-2 pe-2">
+      <div class="title-container">
+        <h5 class="title">{{ title }}</h5>
+      </div>
+      <div class="d-flex justify-content-between mt-1">
+        <small class="text-secondary" style="font-size: medium">{{
+          author
+        }}</small>
+        <p class="fw-bold">
+          {{ price | currency : "USD" : "symbol" : "1.2-2" }}
+        </p>
+      </div>
+    </mat-card-content>
+  </span>
+  <mat-card-actions>
+    @if(!isAdmin){
+    <!-- Increment & decrement the item count buttons -->
+    @if(isItemInCart() && getItemCount()<9){
+    <div class="d-flex w-100">
+      <!-- Decrement Btn -->
+      <div class="me-auto">
+        <button
+          mat-stroked-button
+          (click)="decreaseItemCount()"
+          [disabled]="isDecreamentingCount"
+        >
+          @if(isDecreamentingCount){
+          <mat-spinner [diameter]="24"></mat-spinner>
+          }@else { &minus; }
+        </button>
+      </div>
+
+      <!-- Item Quantity -->
+      <div class="w-100 p-1 text-center">
+        <p class="fw-medium pt-1">{{ getItemCount() }}</p>
+      </div>
+
+      <!-- Increment Btn -->
+      <div>
+        <button
+          mat-stroked-button
+          (click)="increaseItemCount()"
+          [disabled]="isIncrementingCount"
+        >
+          @if(isIncrementingCount){
+          <mat-spinner [diameter]="24"></mat-spinner>
+          }@else { &plus; }
+        </button>
+      </div>
+    </div>
+
+    }@else {
+
+    <!-- Loading Spinner for adding to cart -->
+    @if(isAddingToCart){
+    <button mat-flat-button class="w-100" disabled>
+      <mat-spinner [diameter]="24"></mat-spinner>
+    </button>
+
+    }@else {
+    <!-- Add to Cart Btn -->
+    <button
+      mat-flat-button
+      color="primary"
+      class="w-100"
+      (click)="addToCart()"
+      [disabled]="getItemCount() >= 9"
+    >
+      <mat-icon>shopping_cart</mat-icon>
+      {{ getItemCount() >= 9 ? "Limit reached" : "Add to Cart" }}
+    </button>
+    } } }@else {
+    <button mat-flat-button class="w-100" (click)="onEdit()">Edit</button>
+    }
+  </mat-card-actions>
+</mat-card>

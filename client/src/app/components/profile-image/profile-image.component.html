@@ -1,0 +1,45 @@
+<div class="profile-container d-flex flex-column align-items-center">
+  <div class="image-container position-relative">
+    <img
+      [id]="cloudinaryId"
+      [src]="preview || avatar || placeholder"
+      class="profile-image rounded-circle"
+      alt="Profile Image"
+    />
+    <button
+      mat-icon-button
+      class="edit-icon"
+      (click)="profileImage.click()"
+      aria-label="Edit profile image"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+    @if(selectedProfile){
+    <button
+      class="upload-btn"
+      mat-icon-button
+      color="primary"
+      (click)="upload()"
+    >
+      <mat-icon>upload</mat-icon>
+    </button>
+    } @if(avatar && !preview){
+    <button
+      mat-icon-button
+      color="warn"
+      class="delete-btn"
+      (click)="deleteProfile()"
+      aria-label="Delete profile image"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+    }
+  </div>
+  <input
+    type="file"
+    class="form-control-file mt-3"
+    style="display: none"
+    #profileImage
+    (change)="onSelectImage($event)"
+  />
+</div>

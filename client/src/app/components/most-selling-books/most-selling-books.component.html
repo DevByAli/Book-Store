@@ -1,0 +1,28 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <h5 class="text-secondary p-2 fw-bold">Most Selling Books</h5>
+  </mat-card-header>
+  <mat-card-content>
+    @if(isLoading){
+    <mat-spinner [diameter]="24"></mat-spinner>
+    } @else if(mostSellingBooks.length === 0){
+    <h5 class="fw-semibold mb-4 ms-1 mt-1">No data</h5>
+    }@else { @for (book of mostSellingBooks; track $index) {
+    <mat-divider></mat-divider>
+    <div class="d-flex align-items-center justify-content-between my-2">
+      <div class="d-flex align-items-center">
+        <img
+          [src]="book.url"
+          class="img-fluid rounded-2 me-2"
+          style="width: 40px; height: 40px"
+        />
+        <div>
+          <p class="mb-0">{{ book.title }}</p>
+          <p class="mb-0 text-secondary">{{ book.author }}</p>
+        </div>
+      </div>
+      <p class="text-secondary fw-medium mb-0">Sold: {{ book.purchased }}</p>
+    </div>
+    } }
+  </mat-card-content>
+</mat-card>

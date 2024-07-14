@@ -1,0 +1,162 @@
+<div class="container mb-5">
+  <mat-accordion class="headers-align">
+    @if(isLoadingOrder){
+    <mat-spinner [diameter]="28"></mat-spinner>
+    }@else {
+
+    <div class="mb-2">
+      <span class="me-2">
+        <app-filter
+          [selectedFilter]="selectedFilter"
+          [filters]="filters"
+          (filter)="onSelectFilter($event)"
+        ></app-filter>
+      </span>
+      <span class="me-2">
+        <app-sort
+          [selectedOrder]="selectedOrder"
+          (order)="onSelectOrder($event)"
+        ></app-sort>
+      </span>
+      @if(selectedFilter){
+      <app-clear-filter (clearFilter)="onClearFilter()"></app-clear-filter>
+      }
+    </div>
+    } @if(orders.length === 0 && !isAdmin && !isLoadingOrder && !(selectedFilter || selectedOrder)){
+    <h5 class="fw-bold">Order something amazing 🛍️</h5>
+    } @else if(orders.length === 0 && isAdmin && !isLoadingOrder){
+    <h5 class="fw-bold">No data</h5>
+    } @for (order of orders; track $index;let last=$last) {
+
+    <mat-expansion-panel
+      [expanded]="step() === $index"
+      (opened)="setStep($index)"
+      hideToggle
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title> Order: {{ $index + 1 }} </mat-panel-title>
+        <mat-panel-description>
+          {{ order.date | date : "short" }}
+          <app-chip [color]="order.status" [text]="order.status"></app-chip>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="d-flex flex-column flex-md-row align-items-start">
+        <div class="order-2 order-md-1 w-100">
+          @if(isAdmin){
+          <!-- Admin -->
+          <div>
+            <h5 class="fw-bold">User</h5>
+            @if(!order.user.avatar){
+            <mat-icon>account_circle</mat-icon>
+            }@else {
+            <img
+              [src]="order.user.avatar"
+              class="img-fluid"
+              style="width: 40px; height: 40px; border-radius: 100%"
+            />
+            }
+            <p class="mt-2">{{ order.user.username }}</p>
+            <p>{{ order.user.email }}</p>
+          </div>
+          }
+          <!-- End -->
+          <div>
+            <h5 class="fw-bold">Shipping Address</h5>
+            @for(address of order.shippingAddress|keyvalue; track $index){
+            @if(address.value){
+            <p>
+              <strong>{{ address.key.toLocaleUpperCase() }}:</strong>
+              {{ address.value }}
+            </p>
+            } }
+          </div>
+        </div>
+
+        <!-- Admin -- change order status -->
+        <div class="order-1 order-md-2 w-100 text-md-end mb-3 mb-md-0">
+          @if(changingStatusId === order.id){
+          <button mat-button disabled>
+            <mat-spinner [diameter]="24"></mat-spinner>
+          </button>
+          }@else {
+          <button
+            mat-button
+            color="primary"
+            [matMenuTriggerFor]="orderStatus"
+            [disabled]="!isAllowToChangeStatus(order.status)"
+          >
+            <mat-icon>change_circle</mat-icon>
+            Change Status
+          </button>
+          }
+          <mat-menu #orderStatus="matMenu">
+            @for(status of orderStatuses; track $index){
+            @if(isStatusMenuAllow(order.status, status)){
+            <button
+              mat-menu-item
+              [value]="status"
+              (click)="onChangeStatus(order.id, status)"
+            >
+              {{ status }}
+            </button>
+            } }
+          </mat-menu>
+        </div>
+        <!-- End  -->
+      </div>
+
+      <h5 class="fw-bold mt-4">Items</h5>
+      <mat-divider></mat-divider>
+      @for(item of order.items; track $index;let last=$last){
+
+      <div class="d-flex align-items-center justify-content-between mb-2 mt-2">
+        <img
+          [src]="item.book.url"
+          class="img-fluid me-2 rounded-2"
+          style="width: 40px; height: 40px"
+        />
+        <div class="d-flex flex-column justify-content-start flex-grow-1">
+          <p class="mb-0">{{ item.book.title }}</p>
+          <p class="text-secondary mb-0">Qty: {{ item.quantity }}</p>
+        </div>
+        <div class="text-end">
+          <p class="mb-0">
+            {{ item.book.price | currency : "USD" : "symbol" : "1.2-2" }}
+          </p>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      }
+      <div class="d-flex justify-content-end text-center pt-2">
+        <p class="fw-bold">
+          Total:
+          {{ order.totalAmount | currency : "USD" : "symbol" : "1.2-2" }}
+        </p>
+      </div>
+
+      <mat-action-row>
+        @if($index>0){
+        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        } @if($index < orders.length-1){
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+        }@if($index === orders.length-1 && $index>0){
+        <button mat-button color="primary" (click)="nextStep()">End</button>
+        }
+      </mat-action-row>
+    </mat-expansion-panel>
+
+    } @if(hasNextPage && !isLoadingOrder){
+    <div class="d-flex justify-content-center align-items-center">
+      <button
+        mat-stroked-button
+        class="p-4 mt-3"
+        color="primary"
+        (click)="onLoadMore()"
+      >
+        Load More
+      </button>
+    </div>
+    }
+  </mat-accordion>
+</div>

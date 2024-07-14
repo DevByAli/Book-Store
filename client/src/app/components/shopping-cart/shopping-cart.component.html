@@ -1,0 +1,118 @@
+<button mat-icon-button [matMenuTriggerFor]="shoppingCart">
+  <mat-icon
+    [matBadge]="
+      getItemCount() > 9 ? '9+' : getItemCount() === 0 ? '' : getItemCount()
+    "
+    matBadgeColor="warn"
+    >shopping_cart</mat-icon
+  >
+</button>
+
+<mat-menu
+  #shoppingCart="matMenu"
+  xPosition="before"
+  (click)="$event.stopPropagation()"
+>
+  <mat-list class="shopping-cart-list">
+    @for (item of items;let last=$last; track $index) {
+    <mat-list-item
+      class="shopping-cart-item mt-2 align-items-baseline justify-content-between"
+    >
+      <div class="row" [id]="item.book._id">
+        <!-- Item Image container -->
+        <div class="col-2 me-2">
+          <img [src]="item.book.url" class="item-img" />
+        </div>
+
+        <!-- Item name -->
+        <div class="col cart-item-title">{{ item.book.title }}</div>
+
+        <div class="col cart-action-btn">
+          <!-- Remove Item button -->
+          <button
+            mat-icon-button
+            (click)="decreaseQuantity(item.book._id); $event.stopPropagation()"
+            [disabled]="decreasingItemId === item.book._id"
+          >
+            @if(decreasingItemId !== item.book._id){
+            <mat-icon>remove_circle_outline</mat-icon>
+            }@else {
+            <mat-spinner [diameter]="24"></mat-spinner>
+            }
+          </button>
+
+          <!-- Display Item Quantity -->
+          <span class="mx-3">{{ item.quantity }}</span>
+
+          <!-- Add Item Button -->
+          <button
+            mat-icon-button
+            (click)="increaseQuantity(item.book._id); $event.stopPropagation()"
+            [disabled]="
+              getItemQuantity(item.book._id) >= 9 ||
+              increasingItemId === item.book._id
+            "
+          >
+            @if(increasingItemId !== item.book._id){
+            <mat-icon>add_circle_outline</mat-icon>
+            }@else {
+            <mat-spinner [diameter]="24"></mat-spinner>
+            }
+          </button>
+        </div>
+
+        <!-- Delete Item from cart Button -->
+        <div class="col-2 p-0 me-1">
+          <button
+            mat-icon-button
+            class="text-danger"
+            (click)="deleteItem(item.book._id); $event.stopPropagation()"
+            [disabled]="deletingItemId === item.book._id"
+          >
+            @if(deletingItemId !== item.book._id){
+            <mat-icon>delete_outline</mat-icon>
+            } @else{
+            <mat-spinner [color]="'warn'" [diameter]="24"></mat-spinner>
+            }
+          </button>
+        </div>
+      </div>
+    </mat-list-item>
+    @if(!last){
+    <mat-divider></mat-divider>
+    } } @empty {
+    <mat-list-item>
+      <p>Add something amazing 🎉</p>
+    </mat-list-item>
+    }
+  </mat-list>
+  @if(getItemCount()>0){
+  <div class="mt-2">
+    <mat-divider></mat-divider>
+    <div class="d-flex p-2">
+      <p class="fw-bold me-auto">Total Amount</p>
+      <p class="fw-bold">
+        {{ getTotalAmount() | currency : "USD" : "symbol" : "1.2-2" }}
+      </p>
+    </div>
+    <mat-divider></mat-divider>
+
+    <!-- Checking out Button -->
+    @if(isCheckingOut){
+    <button mat-flat-button [disabled]="true" class="mt-2 checkout-btn">
+      <mat-spinner [diameter]="24"></mat-spinner>
+    </button>
+    }@else {
+    <button
+      mat-flat-button
+      color="primary"
+      class="mt-2 checkout-btn"
+      (click)="onCheckout(); $event.stopPropagation()"
+    >
+      <mat-icon>shopping_cart_checkout</mat-icon>
+      Checkout
+    </button>
+    }
+  </div>
+  }
+</mat-menu>

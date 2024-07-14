@@ -1,0 +1,34 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <h5 class="fw-bold p-2 text-secondary">Top Customer Countries</h5>
+    <mat-divider></mat-divider>
+  </mat-card-header>
+  <mat-card-content class="mx-2">
+    @if(isLoading){
+    <mat-spinner [diameter]="24"></mat-spinner>
+    } @else if(topCustomerCountries.length === 0){
+    <h5 class="fw-semibold mb-4 mt-1">No data</h5>
+    }@else { @for (country of topCustomerCountries; track $index) {
+    <div class="row mt-2 mx-1">
+      <div class="col">
+        {{ country.country }}
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="fw-bold" style="font-size: 18px">
+          {{ country.totalQuantity }}
+        </p>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    }
+    <div class="row">
+      <div class="col">
+        <p class="fw-bold text-secondary">Country</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="fw-bold text-secondary">Orders</p>
+      </div>
+    </div>
+    }
+  </mat-card-content>
+</mat-card>

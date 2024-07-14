@@ -1,0 +1,11 @@
+<button mat-stroked-button [matMenuTriggerFor]="menu">
+  <mat-icon>filter_list</mat-icon>
+  Filter by {{ filters[selectedFilter] ? ": " + filters[selectedFilter] : "" }}
+</button>
+<mat-menu #menu="matMenu">
+  @for (filter of filters|keyvalue; track filter.key) {
+  <button mat-menu-item (click)="onFilterSelect(filter.key)">
+    {{ filter.value }}
+  </button>
+  }
+</mat-menu>

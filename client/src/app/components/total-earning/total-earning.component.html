@@ -1,0 +1,35 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <div class="row w-100">
+      <div class="col-9">
+        <h4 class="fw-bold p-2 text-secondary">Total Earning</h4>
+      </div>
+      <div class="col-3 text-end">
+        <button mat-button [matMenuTriggerFor]="menu" class="p-2">
+          {{ selectedEarningFilter }}
+          <mat-icon>calendar_month</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          @for(filter of earningFilter; track $index){
+          <button
+            mat-menu-item
+            [value]="filter"
+            (click)="onSelectingEarningFilter(filter)"
+          >
+            {{ filter.toUpperCase() }}
+          </button>
+          }
+        </mat-menu>
+      </div>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    @if(isLoading){
+    <mat-spinner [diameter]="24"></mat-spinner>
+    }@else {
+    <h1 class="fw-bolder text-dark my-3" style="font-size: 40px">
+      {{ totalEarning | currency : "USD" : "symbol" : "1.2-2" }}
+    </h1>
+    }
+  </mat-card-content>
+</mat-card>

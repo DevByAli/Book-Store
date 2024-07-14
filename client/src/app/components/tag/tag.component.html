@@ -1,0 +1,29 @@
+<div class="container">
+  <h1 class="mb-2 fw-bold">🏷️ Tags</h1>
+
+  <mat-form-field class="w-100">
+    <mat-label>Book Tags</mat-label>
+    <mat-chip-grid #chipGrid aria-label="Enter tags">
+      @for (tags of tags(); track tags) {
+      <mat-chip-row
+        (removed)="remove(tags)"
+        [editable]="true"
+        (edited)="edit(tags, $event)"
+        [aria-description]="'press enter to edit ' + tags.tag"
+      >
+        {{ tags.tag }}
+        <button matChipRemove [attr.aria-label]="'remove ' + tags.tag">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+      }
+      <input
+        placeholder="New tag..."
+        [matChipInputFor]="chipGrid"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (matChipInputTokenEnd)="addTag($event)"
+      />
+    </mat-chip-grid>
+  </mat-form-field>
+</div>

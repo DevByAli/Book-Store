@@ -1,0 +1,29 @@
+.user-img {
+  width: 40px;
+  height: 40px;
+  object-fit: fill;
+  border-radius: 4px;
+}
+
+.notification-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notification-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notification-list::-webkit-scrollbar-track {
+  background-color: rgb(195, 216, 255);
+}
+
+.notification-list::-webkit-scrollbar-thumb {
+  background-color: rgb(110, 170, 253);
+  border-radius: 4px;
+  background-clip: padding-box;
+}
+
+.notification-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(55, 137, 253);
+}

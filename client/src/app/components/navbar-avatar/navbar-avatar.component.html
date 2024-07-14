@@ -1,0 +1,7 @@
+<div class="avatar-container">
+  @if(!url){
+  <mat-icon class="mt-1">account_circle</mat-icon>
+  }@else {
+  <img class="avatar" [src]="url || placeholder" alt="navbar-avatar" />
+  }
+</div>

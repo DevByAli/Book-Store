@@ -1,0 +1,54 @@
+<div class="container mt-5">
+  <div class="row">
+    @if(isLoading){
+    <div>
+      <mat-spinner [diameter]="24"></mat-spinner>
+    </div>
+    }@else if(books.length === 0){
+    <h5 class="fw-bold">No Result</h5>
+    } @else {
+
+    <div class="mb-4">
+      <h5 class="fw-bolder">Search: {{ searchQuery }}</h5>
+    </div>
+    <div class="mb-3">
+      <app-filter
+        [filters]="filters"
+        [selectedFilter]="filter"
+        (filter)="onSelectFilter($event)"
+      ></app-filter>
+      <span class="ms-2 me-2">
+        <app-sort
+          [selectedOrder]="order"
+          (order)="onSelectOrder($event)"
+        ></app-sort>
+      </span>
+      @if (filter || order) {
+      <app-clear-filter (clearFilter)="onClearFilter()"></app-clear-filter>
+      }
+    </div>
+    @for (book of books; track $index) {
+    <div class="col-md-6 col-lg-3 mb-4">
+      <app-book-card
+        [bookId]="book._id"
+        [title]="book.title"
+        [author]="book.author"
+        [price]="book.price"
+        [url]="book.url"
+      ></app-book-card>
+    </div>
+    } }
+  </div>
+  @if(hasNextPage){
+  <div class="text-center w-100">
+    <button
+      mat-stroked-button
+      color="primary"
+      class="p-4 mt-2 mb-5"
+      (click)="loadMore()"
+    >
+      Load More
+    </button>
+  </div>
+  }
+</div>

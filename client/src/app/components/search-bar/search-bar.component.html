@@ -1,0 +1,40 @@
+<div class="search-container">
+  <mat-form-field appearance="outline" class="w-100">
+    <input
+      (input)="onSearch(searchField.value)"
+      (keydown.enter)="onSearch(searchField.value, true)"
+      type="text"
+      #searchField
+      matInput
+      placeholder="Search Book"
+    />
+
+    @if (searchField.value) {
+    <button
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="searchField.value = ''"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+    } @else {
+    <mat-icon matSuffix>search</mat-icon>
+    }
+  </mat-form-field>
+
+  @if(searchField.value && searchResult.length>0){
+  <div class="search-results">
+    <ul>
+      @for (book of searchResult; track $index) {
+      <li
+        [value]="book.title"
+        (click)="onSelectSearchResult(book.title); searchField.value = ''"
+      >
+        {{ book.title }}
+      </li>
+      }
+    </ul>
+  </div>
+  }
+</div>

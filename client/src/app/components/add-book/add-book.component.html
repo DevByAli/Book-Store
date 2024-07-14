@@ -1,0 +1,199 @@
+<div class="container d-flex justify-content-center align-items-center">
+  <div class="row">
+    @if(editBookId && editBookErrorMessage){
+    <h2>{{ editBookErrorMessage }}</h2>
+    }@else {
+
+    <div class="col-md-4 col-12 mb-3 mb-md-0">
+      <img
+        [id]="bookForm.value['cloudinaryId']"
+        [src]="preview || bookForm.value['url'] || placeholder"
+        class="img-fluid w-100 rounded-2"
+        alt="Book Image"
+      />
+      <input
+        type="file"
+        style="display: none"
+        (change)="onSelectImage($event)"
+        #selectImage
+      />
+
+      <button
+        mat-flat-button
+        color="accent"
+        class="w-100 mt-2"
+        (click)="selectImage.click()"
+      >
+        Select Image
+      </button>
+    </div>
+    <div class="col-md-8 col-12">
+      <form
+        [formGroup]="bookForm"
+        novalidate
+        class="col w-100"
+        (ngSubmit)="addOrEditBook()"
+      >
+        <!-- Title -->
+        <div>
+          <mat-form-field hideRequiredMarker class="w-100">
+            <mat-label>Title</mat-label>
+            <input
+              matInput
+              type="text"
+              minlength="3"
+              maxlength="50"
+              formControlName="title"
+              placeholder="Ex. 3 Days to See"
+              #title
+            />
+            <mat-icon matSuffix>title</mat-icon>
+            <mat-hint align="end">{{ title.value.length }}/50</mat-hint>
+            @if(getField(title)?.hasError('minlength')){
+            <mat-error
+              >Title is at least of <strong>3</strong> characters.</mat-error
+            >
+            }@if (getField(title)?.hasError('maxlength')) {
+            <mat-error
+              >Title is at most of <strong>50</strong> characters.</mat-error
+            >
+            } @if (getField(title)?.hasError('pattern')) {
+            <mat-error>Title is only contain letters.</mat-error>
+            } @if (getField(title)?.hasError('required')) {
+            <mat-error>Title is <strong>required</strong>.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <!-- Author -->
+        <div>
+          <mat-form-field hideRequiredMarker class="w-100">
+            <mat-label>Author</mat-label>
+            <input
+              matInput
+              type="text"
+              minlength="1"
+              maxlength="50"
+              formControlName="author"
+              placeholder="Ex. Emilie"
+              #author
+            />
+            <mat-icon matSuffix>auto_stories</mat-icon>
+            <mat-hint align="end">{{ author.value.length }}/50</mat-hint>
+            @if(getField(author)?.hasError('minlength')){
+            <mat-error
+              >Author is at least of <strong>3</strong> characters.</mat-error
+            >
+            }@if (getField(author)?.hasError('maxlength')) {
+            <mat-error
+              >Author is at most of <strong>50</strong> characters.</mat-error
+            >
+            } @if (getField(author)?.hasError('pattern')) {
+            <mat-error>Author is only contain letters.</mat-error>
+            } @if (getField(author)?.hasError('required')) {
+            <mat-error>Author is <strong>required</strong>.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- Price -->
+        <div>
+          <mat-form-field hideRequiredMarker class="w-100">
+            <mat-label>Price</mat-label>
+            <input
+              matInput
+              type="number"
+              min="1"
+              max="500"
+              formControlName="price"
+              placeholder="Ex. 10$"
+              #price
+            />
+            <mat-icon matSuffix>attach_money</mat-icon>
+            @if (getField(price)?.hasError('required')) {
+            <mat-error>Price is <strong>required</strong>.</mat-error>
+            } @if(getField(price)?.hasError('min')){
+            <mat-error
+              >Price is at least of <strong>1 dollar</strong>.</mat-error
+            >
+            }@if (getField(price)?.hasError('max')) {
+            <mat-error
+              >Price is at most of <strong>500 dollars</strong>.</mat-error
+            >
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- Tags -->
+        <div>
+          <mat-form-field hideRequiredMarker class="w-100">
+            <mat-label>Tags</mat-label>
+            <mat-select formControlName="tags" multiple #tagsMenu>
+              @for (tag of tags; track tag) {
+              <mat-option [value]="tag">{{ tag }}</mat-option>
+              }
+            </mat-select>
+            <mat-icon matSuffix>style</mat-icon>
+            @if (bookForm.get("tagsMenu")?.hasError('required')) {
+            <mat-error>Tag is <strong>required</strong>.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <mat-form-field
+            style="width: 100%"
+            hideRequiredMarker
+            class="example-full-width"
+          >
+            <mat-label>Write something...</mat-label>
+            <textarea
+              matInput
+              minlength="20"
+              maxlength="3000"
+              formControlName="description"
+              #description
+            ></textarea>
+            <mat-hint align="end">{{ description.value.length }}/3000</mat-hint>
+            @if (getField(description)?.hasError('required')) {
+            <mat-error>Description is <strong>required</strong>.</mat-error>
+            }@if (getField(description)?.hasError('minlength')) {
+            <mat-error
+              >Description is at least of
+              <strong>20</strong> characters.</mat-error
+            >
+            } @if (getField(description)?.hasError('maxlength')) {
+            <mat-error
+              >Description is at most of
+              <strong>3000</strong> characters.</mat-error
+            >
+            }
+          </mat-form-field>
+        </div>
+
+        @if(isLoading){
+        <button
+          mat-flat-button
+          color="primary"
+          class="p-4 mb-4 mt-4 w-100"
+          disabled="true"
+        >
+          <mat-spinner [diameter]="24"></mat-spinner>
+        </button>
+        }@else {
+        <!-- Add or Edit Book button -->
+        <button
+          mat-flat-button
+          color="primary"
+          class="p-4 mb-4 mt-4 w-100"
+          [disabled]="!bookForm.valid"
+        >
+          <mat-icon>auto_stories</mat-icon>
+          {{ editBookId ? "Edit Book" : "Add Book" }}
+        </button>
+        }
+      </form>
+    </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<nav class="navbar">
+  <div
+    class="container-fluid d-flex justify-content-between align-items-center"
+  >
+    <div class="brand-container" (click)="onSelectBrand()">
+      <img
+        class="brand-icon"
+        [src]="
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Open_book_nae_02.svg/800px-Open_book_nae_02.svg.png'
+        "
+        alt=""
+      />
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar d-none d-sm-block flex-grow-1">
+      <app-search-bar></app-search-bar>
+    </div>
+
+    <div class="pb-1 d-flex">
+      <div class="d-block d-sm-none">
+        <button mat-icon-button (click)="toggleSearch()">
+          <mat-icon>search</mat-icon>
+        </button>
+      </div>
+
+      <div class="me-1">
+        <app-notification></app-notification>
+      </div>
+
+
+      @if(!isAdmin){
+      <!-- Shopping Cart Component -->
+      <div class="me-1">
+        <app-shopping-cart></app-shopping-cart>
+      </div>
+      }
+    
+      <div [matMenuTriggerFor]="beforeMenu">
+        <app-navbar-avatar [avatar]="avatar"></app-navbar-avatar>
+      </div>
+      <mat-menu #beforeMenu="matMenu" xPosition="before">
+        <button mat-menu-item (click)="onSelectProfile()">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </button>
+        <button mat-menu-item (click)="onSelectStore()">
+          <mat-icon>storefront</mat-icon>
+          <span>Store</span>
+        </button>
+        @if(!isAdmin){
+        <button mat-menu-item (click)="onSelectOrders()">
+          <mat-icon>shopping_bag</mat-icon>
+          <span>Orders</span>
+        </button>
+        } @if(isAdmin) {
+        <button mat-menu-item (click)="onSelectTags()">
+          <mat-icon>shopping_bag</mat-icon>
+          <span>Tags</span>
+        </button>
+        <button mat-menu-item (click)="onAddBook()">
+          <mat-icon>book</mat-icon>
+          <span>Add Book</span>
+        </button>
+        }
+        <button mat-menu-item class="logout-btn" (click)="onSelectLogout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</nav>
+
+@if(showSearch){
+<div class="d-block d-sm-none me-1">
+  <app-search-bar></app-search-bar>
+</div>
+}
